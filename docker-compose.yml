@@ -5,3 +5,13 @@ services:
     container_name: movies-api
     ports:
       - '9000:9000'
+
+    mongodb:
+      image: mongo:8.0-rc
+      
+    
+    mongo-express:
+      image: mongo-express:1.0-20-alpine3.19
+
+    redis:
+      image: redis:alpine
