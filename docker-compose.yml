@@ -12,6 +12,9 @@ services:
     depends_on:
       - mongodb
       - redis
+    networks:
+      - movies-network
+      - mongo-network
 
 
   mongodb:
@@ -22,6 +25,9 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGODB_DATABASE}
+    networks:
+      - mongo-network
+      - admin-network
       
     
   mongo-express:
@@ -35,7 +41,19 @@ services:
       - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGODB_PASSWORD}
     depends_on:
       - mongodb
+    networks:
+      - admin-network
 
 
   redis:
     image: redis:alpine
+    networks:
+      - movies-network
+
+  network:
+    movies-network: # Movies API and Redis
+      driver: bridge
+    db-network: # Movies API and MongoDB
+      driver: bridge
+    admin-network:  # Mongo Express and MongoDB
+      driver: bridge
