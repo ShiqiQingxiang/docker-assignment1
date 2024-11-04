@@ -69,10 +69,10 @@ services:
       - mongo-network
 
 
-network:
+networks:
   movies-network: # Movies API and Redis
     driver: bridge
-  db-network: # Movies API and MongoDB and mongo-seed
+  mongo-network: # Movies API and MongoDB and mongo-seed
     driver: bridge
   admin-network:  # Mongo Express and MongoDB
     driver: bridge
