@@ -69,15 +69,14 @@ services:
       - mongo-network
 
 
+network:
+  movies-network: # Movies API and Redis
+    driver: bridge
+  db-network: # Movies API and MongoDB and mongo-seed
+    driver: bridge
+  admin-network:  # Mongo Express and MongoDB
+    driver: bridge
 
-  network:
-    movies-network: # Movies API and Redis
-      driver: bridge
-    db-network: # Movies API and MongoDB and mongo-seed
-      driver: bridge
-    admin-network:  # Mongo Express and MongoDB
-      driver: bridge
-
-  volumes:
-    mongodb-data:
-      driver: local
+volumes:
+  mongodb-data:
+    driver: local
