@@ -52,7 +52,7 @@ Use the mongoimport tool to import data from a json file into a database. `seedi
 mongoimport --host mongodb --username admin --password password --db Movies --collection movies --type json --file seeding.json --jsonArray --authenticationDatabase=admin
 ```
 
-### Dev 模式
+### Dev model
 
 use for control  `profiles`
 
