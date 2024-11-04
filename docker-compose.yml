@@ -5,13 +5,37 @@ services:
     container_name: movies-api
     ports:
       - '9000:9000'
+    environment:
+      - MONGODB_URI=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb:27017/${MONGODB_DATABASE}
+      - REDIS_URI=redis://redis
+      - ENABLE_WRITING_HANDLERS=false
+    depends_on:
+      - mongodb
+      - redis
 
-    mongodb:
-      image: mongo:8.0-rc
+
+  mongodb:
+    image: mongo:8.0-rc
+    volumes:
+      - mongodb-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGODB_DATABASE}
       
     
-    mongo-express:
-      image: mongo-express:1.0-20-alpine3.19
+  mongo-express:
+    image: mongo-express:1.0-20-alpine3.19
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGODB_USERNAME}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGODB_PASSWORD}
+    depends_on:
+      - mongodb
 
-    redis:
-      image: redis:alpine
+
+  redis:
+    image: redis:alpine
