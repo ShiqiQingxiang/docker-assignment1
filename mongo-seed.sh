@@ -1,0 +1,1 @@
+mongoimport --host mongodb --username admin --password password --db movies --collection properties --type json --file seeding.json --jsonArray

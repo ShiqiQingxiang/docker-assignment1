@@ -6,7 +6,7 @@ services:
     ports:
       - '9000:9000'
     environment:
-      - MONGODB_URI=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb:27017/${MONGODB_DATABASE}
+      - MONGODB_URI=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb:27017
       - REDIS_URI=redis://redis
       - ENABLE_WRITING_HANDLERS=false
     depends_on:
@@ -24,7 +24,6 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
-      - MONGO_INITDB_DATABASE=${MONGODB_DATABASE}
     networks:
       - mongo-network
       - admin-network
@@ -43,6 +42,8 @@ services:
       - mongodb
     networks:
       - admin-network
+    profiles:
+      - dev
 
 
   redis:
@@ -50,10 +51,33 @@ services:
     networks:
       - movies-network
 
+  
+  mongo-seed:
+    image: mongo:8.0-rc
+    depends_on:
+      - mongodb
+    command: /mongo-seed.sh
+    volumes:
+      - ./seeding.json:/seeding.json
+      - ./mongo-seed.sh:/mongo-seed.sh
+    profiles:
+      - dev
+    environment:
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
+      - MONGODB_URI=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb:27017
+    networks:
+      - mongo-network
+
+
+
   network:
     movies-network: # Movies API and Redis
       driver: bridge
-    db-network: # Movies API and MongoDB
+    db-network: # Movies API and MongoDB and mongo-seed
       driver: bridge
     admin-network:  # Mongo Express and MongoDB
       driver: bridge
+
+  volumes:
+    mongodb-data:
+      driver: local
