@@ -46,7 +46,7 @@ The app’s architecture is illustrated below:
       - mongo-network
 ```
 
-Use the mongoimport tool to import data from a json file into a database.下 bash。`seeding-mongo.sh`
+Use the mongoimport tool to import data from a json file into a database. `seeding-mongo.sh`
 
 ```bash
 mongoimport --host mongodb --username admin --password password --db Movies --collection movies --type json --file seeding.json --jsonArray --authenticationDatabase=admin
